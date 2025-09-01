@@ -5,12 +5,6 @@ import java.swing.JOptionPane;
 import java.util.Base64;
 
 public class Blowfish {
-public static byte[] encrypt(byte[] plaintext, byte[] key) throws Exception { Cipher cipher = Cipher.getInstance("Blowfish"); return cipher.doFinal(plaintext);
-}
-
-public static byte[] decrypt(byte[] ciphertext, byte[] key) throws Exception { 
-	return 
-}
 public static void main(String[] args) throws Exception {
 KeyGenerator keyGenerator= keyGenerator.getInstance("Blowfish");
 KeyGenerator.init(128);
@@ -26,3 +20,4 @@ JOptionPane.showMessageDialog(JOption.getRootFrame(),
 +”\n”+” Decrypted Text: ”+”new string(decryptedBytes)”;
 }
 }
+
