@@ -1,0 +1,19 @@
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
+import java.util.Base64;
+public class Main {
+    public static void main(String[] args) throws Exception{
+        String originalString="Hello World";
+        String keyString="01234567";
+        DESKeySpec desKeySpec=new DESKeySpec(keyString.getBytes());
+        SecretKey secretKey=SecretKeyFactory.getInstance("DES").generateSecret(desKeySpec);
+        Cipher cipher=Cipher.getInstance("DES/ECB/PKCS5Padding");
+        cipher.init(Cipher.ENCRYPT_MODE,secretKey);
+        byte[] eb= cipher.doFinal(originalString.getBytes());
+        String et=Base64.getEncoder().encodeToString(eb);
+        System.out.println("Original String:"+originalString);
+        System.out.println("Encrypted String:"+et);
+    }
+}
