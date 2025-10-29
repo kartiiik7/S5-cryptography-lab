@@ -1,0 +1,49 @@
+import java.security.KeyPairGenerator;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        try{
+            KeyPairGenerator keyPairGenerator=KeyPairGenerator.getInstance("DSA");
+            keyPairGenerator.initialize(2048);
+            KeyPair keyPair=keyPairGenerator.generateKeyPair();
+            PrivateKey privateKey=keyPair.getPrivate();
+            PublicKey publicKey= keyPair.getPublic();
+            Signature signature=Signature.getInstance("SHA256withDSA");
+            signature.initSign(privateKey);
+            Scanner scanner=new Scanner(System.in);
+            System.out.println("Enter the Message:");
+            String message=scanner.nextLine();
+            signature.update(message.getBytes());
+            byte[] digitalSiganture= signature.sign();
+            System.out.println("Digital Signature:"+bytesToHex(digitalSiganture));
+            signature.initVerify(publicKey);
+            signature.update(message.getBytes());
+            boolean isVerfied= signature.verify(digitalSiganture);
+            if (isVerfied){
+                System.out.println("Signature Verfied :Message is authentic");
+            }
+            else {
+                System.out.println("Signature Verfied Failed:Message is has been tampered with!");
+            }
+            scanner.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    private static String bytesToHex(byte[] bytes){
+        StringBuilder hexString=new StringBuilder();
+        for(byte b: bytes){
+            String hex=Integer.toHexString(0xff & b);
+            if(hex.length()==1){
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
+}
