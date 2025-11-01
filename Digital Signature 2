@@ -1,0 +1,31 @@
+import java.security.*;
+import java.util.*;
+public class Main {
+    public static void main(String[] args) throws Exception {
+        System.out.println("Enter the Message:");
+        Scanner sc=new Scanner(System.in);
+        String message=sc.nextLine();
+        KeyPairGenerator keyPairGenerator=KeyPairGenerator.getInstance("DSA");
+        keyPairGenerator.initialize(2048);
+        KeyPair keyPair=keyPairGenerator.generateKeyPair();
+        PrivateKey privateKey=keyPair.getPrivate();
+        PublicKey publicKey=keyPair.getPublic();
+        Signature sign=Signature.getInstance("SHA256withDSA");
+        sign.initSign(privateKey);
+        sign.update(message.getBytes());
+        byte[] ds= sign.sign();
+        System.out.println("Digital Signature:");
+        for(byte b:ds){
+            System.out.printf("%02x",b);
+        }
+        sign.initVerify(publicKey);
+        sign.update(message.getBytes());
+        boolean isVerfied= sign.verify(ds);
+        System.out.println();
+        if(isVerfied)
+            System.out.println("Authenthic ");
+        else
+            System.out.println("Not Authenthic ");
+        sc.close();
+    }
+}
